@@ -7,9 +7,11 @@ import (
 	"path/filepath"
 )
 
-var prog = os.Args[0]
-var goFile = os.Getenv("GOFILE")
-var goPackage = os.Getenv("GOPACKAGE")
+var (
+	prog      = os.Args[0]
+	goFile    = os.Getenv("GOFILE")
+	goPackage = os.Getenv("GOPACKAGE")
+)
 
 func main() {
 	if goFile == "" || goPackage == "" {
