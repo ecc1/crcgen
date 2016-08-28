@@ -1,6 +1,6 @@
 package main
 
-//go:generate ../crcgen/crcgen -size 8 -poly 0x9B
+//go:generate crcgen -size 8 -poly 0x9B
 
 // Compute CRC-8 using WCDMA polynomial.
 func crc8(msg []byte) byte {
