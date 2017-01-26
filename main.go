@@ -47,9 +47,9 @@ func main() {
 	f := setup()
 	switch *crcSize {
 	case 8:
-		genCrc8(f)
+		genCRC8(f)
 	case 16:
-		genCrc16(f)
+		genCRC16(f)
 	}
 }
 
@@ -64,7 +64,7 @@ func setup() *os.File {
 }
 
 // Generate lookup table for CRC-8 calculation
-func genCrc8(f *os.File) {
+func genCRC8(f *os.File) {
 	poly := uint8(*polynomial)
 	fmt.Fprintf(f, "// Lookup table for CRC-8 calculation with polyomial 0x%02X.\n", poly)
 	fmt.Fprintf(f, "var crc8Table = []uint8{\n")
@@ -92,7 +92,7 @@ func genCrc8(f *os.File) {
 }
 
 // Generate lookup table for CRC-16 calculation
-func genCrc16(f *os.File) {
+func genCRC16(f *os.File) {
 	poly := uint16(*polynomial)
 	fmt.Fprintf(f, "// Lookup table for CRC-16 calculation with polynomial 0x%04X.\n", poly)
 	fmt.Fprintf(f, "var crc16Table = []uint16{\n")
