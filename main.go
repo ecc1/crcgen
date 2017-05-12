@@ -3,6 +3,7 @@ package main
 import (
 	"flag"
 	"fmt"
+	"io"
 	"log"
 	"os"
 	"path"
@@ -18,12 +19,12 @@ var (
 	outputFile = flag.String("output", "", "output `filename` (default: crc<size>_table.go)")
 )
 
+// Usage prints the program's usage information.
 func Usage() {
 	stdUsage()
 	fmt.Fprintln(os.Stderr, "")
 	fmt.Fprintln(os.Stderr, "See https://en.wikipedia.org/wiki/Cyclic_redundancy_check#Standards_and_common_use")
 	fmt.Fprintln(os.Stderr, "for more information about CRC polynomials.")
-	os.Exit(1)
 }
 
 func main() {
@@ -53,7 +54,7 @@ func main() {
 	}
 }
 
-func setup() *os.File {
+func setup() io.WriteCloser {
 	f, err := os.Create(*outputFile)
 	if err != nil {
 		log.Fatalf("%s: %v\n", prog, err)
@@ -63,8 +64,8 @@ func setup() *os.File {
 	return f
 }
 
-// Generate lookup table for CRC-8 calculation
-func genCRC8(f *os.File) {
+// genCRC8 generates the lookup table for a CRC-8 calculation.
+func genCRC8(f io.WriteCloser) {
 	poly := uint8(*polynomial)
 	fmt.Fprintf(f, "// Lookup table for CRC-8 calculation with polyomial 0x%02X.\n", poly)
 	fmt.Fprintf(f, "var crc8Table = []uint8{\n")
@@ -88,11 +89,11 @@ func genCRC8(f *os.File) {
 		}
 	}
 	fmt.Fprintf(f, "}\n")
-	f.Close()
+	_ = f.Close()
 }
 
-// Generate lookup table for CRC-16 calculation
-func genCRC16(f *os.File) {
+// genCRC16 generates the lookup table for a CRC-16 calculation.
+func genCRC16(f io.WriteCloser) {
 	poly := uint16(*polynomial)
 	fmt.Fprintf(f, "// Lookup table for CRC-16 calculation with polynomial 0x%04X.\n", poly)
 	fmt.Fprintf(f, "var crc16Table = []uint16{\n")
@@ -118,5 +119,5 @@ func genCRC16(f *os.File) {
 		}
 	}
 	fmt.Fprintf(f, "}\n")
-	f.Close()
+	_ = f.Close()
 }
